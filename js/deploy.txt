@@ -1,0 +1,47 @@
+#!/bin/bash
+echo "1 CONFIG ---------------------------------------------------------------------"
+
+echo "1.1 - Set devnet provider"
+echo "$ solana config set --url https://api.devnet.solana.com"
+solana config set --url https://api.devnet.solana.com        # DEVNET
+#solana config set --url https://api.mainnet-beta.solana.com # MAINNET
+echo ""
+
+echo "1.2 - Create new wallet for test upload"
+echo "$ solana-keygen new --outfile my-keypair.json"
+solana-keygen new --outfile my-keypair.json
+echo "Pubkey"
+solana-keygen pubkey my-keypair.json
+echo ""
+
+echo "1.3 - Set new wallet as default wallet"
+echo "$ solana config set --keypair my-keypair.json"
+solana config set --keypair my-keypair.json
+echo ""
+
+echo "1.4 - Get TEST SOL using airdrop"
+echo "$ solana airdrop 1"
+solana airdrop 1
+echo ""
+
+echo ""
+echo "2 DEPLOY ---------------------------------------------------------------------"
+echo "2.1 - UPLOAD"
+echo "$ ts-node src/cli.ts upload ./assets -k my-keypair.json"
+ts-node src/cli.ts upload ./assets -k my-keypair.json
+echo ""
+
+echo "2.2 - Verify"
+echo "$ ts-node src/cli.ts verify"
+ts-node src/cli.ts verify
+echo ""
+
+echo "2.3 - Create Candy Machine"
+echo "$ ts-node src/cli.ts create_candy_machine -k my-keypair.json --price 1"
+ts-node src/cli.ts create_candy_machine -k my-keypair.json --price 1
+echo ""
+
+echo "2.4 - Set Start Date"
+echo "$ ts-node src/cli.ts set_start_date -d \"26 Sep 2021 17:10:00 GMT\" -k my-keypair.json"
+ts-node src/cli.ts set_start_date -d "26 Sep 2021 17:10:00 GMT" -k my-keypair.json
+echo ""
